@@ -56,9 +56,55 @@
       ===================== */
 
       var jsonToCsv = function(json) { console.log(json); };
-
-
+      //first create a new array
+      var newArray = new Array();
+      //then abstract the keys
+      var newArrayKey = Object.keys(healthCenters[0]);
+      //then get the values of individual health Center
+      newArray.push(newArrayKey);
+      var newArrayValues = new Array();
+      for(i=0; i<healthCenters.length; i++){
+        newArrayValues[i] = values(healthCenters[i]);
+        newArray.push(newArrayValues[i]);
+      }
+      //define constraints
       var addMarkers = function(map) {};
+      function range (zip){
+        if (zip>=19140 && zip <=19149){
+          return true;
+        }
+        else {
+          return false;
+        }
+      }
+      function service (dental){
+        if (dental!= "N/A"){
+          return true;
+        }
+        else {
+          return false;
+        }
+      }
+      //define icon for dental service
+      var myIcon = L.icon({
+        iconUrl: 'https://static1.squarespace.com/static/586ef2c6bf629a58a3512dfa/t/5873d75d46c3c455fb201efb/1484356771672/tooth-icon.png?format=500w',
+        iconSize: [40, 40],
+        iconAnchor: [20, 40],
+        popupAnchor: [-0, -0],
+        });
+      //add markers, popups and icons for selected centers
+      for(i=1;i<newArray.length;i++){
+      if(range(newArray[i][5]) && service(newArray[i][8])){
+        L.marker([newArray[i][1], newArray[i][0]], {icon: myIcon}).addTo(map).bindPopup(newArray[i][3]).openPopup();
+        }
+        else if (range(newArray[i][5]))
+        {
+          L.marker([newArray[i][1], newArray[i][0]]).addTo(map).bindPopup(newArray[i][3]).openPopup();
+        }
+      }
+
+
+
 
       /* =====================
 
